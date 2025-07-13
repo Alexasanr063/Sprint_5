@@ -2,7 +2,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.edge.options import Options
-from pages import MainPage  # Изменяем импорт
+from pages import MainPage
 
 
 @pytest.fixture
@@ -21,5 +21,5 @@ def browser():
 
 
 @pytest.fixture
-def main_page(browser):  # Переименовываем фикстуру
+def main_page(browser):
     return MainPage(browser)

@@ -2,7 +2,7 @@ import pytest
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from locators import MainPageLocators, AuthModalLocators, ProfileLocators, LoginFormLocators
-from pages import MainPage, LoginPage, ProfilePage  # Изменяем импорты
+from pages import MainPage, LoginPage, ProfilePage
 
 
 def test_check_ad_in_my_ads(browser, main_page):
