@@ -30,7 +30,7 @@ class ProfileLocators:
     # Основной контейнер объявления
     AD_CARD = (By.CSS_SELECTOR, "div.card")
 
-    # Заголовок объявления (более надежный вариант)
+    # Заголовок объявления
     AD_TITLE = (By.CSS_SELECTOR, "div.card h2.h2")
 
     # Местоположение
