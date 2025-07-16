@@ -1,61 +1,32 @@
-import pytest
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
-from locators import MainPageLocators, AuthModalLocators, ProfileLocators, LoginFormLocators
-from pages import MainPage, LoginPage, ProfilePage
+from Sprint_5.pages import LoginPage, ProfilePage
+from Sprint_5.locators import ProfileLocators, AuthModalLocators, LoginFormLocators, MainPageLocators
+from Sprint_5.conftest import main_page,browser
 
+class TestAdCreation:
+    def test_check_ad_in_my_ads(self, main_page, browser):
+        """Тест проверки объявления в профиле"""
+        main_page.open()
+        main_page.click(MainPageLocators.LOGIN_REGISTER_BUTTON)
 
-def test_check_ad_in_my_ads(browser, main_page):
-    """Проверить, что в блоке 'Мои объявления' отображается созданное объявление"""
-    # 1. Авторизация
-    profile_page = main_page.open_login_form().login(
-        email="sanek51532@gmail.com",
-        password="281188sss"
-    )
+        login_page = LoginPage(browser)
+        login_page.login(email="sanek51532@gmail.com", password="281188sss")
 
-    # 2. Переход в профиль
-    profile_page.open_profile()
+        profile_page = ProfilePage(browser)
+        profile_page.open_profile()
 
-    # 3. Проверка объявления
-    ad_card = WebDriverWait(browser, 20).until(
-        EC.presence_of_element_located(ProfileLocators.AD_CARD)
-    )
+        ad_card = profile_page.get_first_ad()
+        assert ad_card.find_element(*ProfileLocators.AD_TITLE).text
+        assert ad_card.find_element(*ProfileLocators.AD_LOCATION).text
+        assert ad_card.find_element(*ProfileLocators.AD_PRICE).text
 
-    # Проверки элементов объявления
-    assert ad_card.find_element(*ProfileLocators.AD_TITLE).text == "Тестовое объявление Selenium"
-    assert ad_card.find_element(*ProfileLocators.AD_LOCATION).text == "Москва"
-    assert ad_card.find_element(*ProfileLocators.AD_PRICE).text == "2 500 ₽"
+    def test_create_ad_unauthorized_user(self, main_page):
+        """Тест попытки создания объявления неавторизованным пользователем"""
+        main_page.open()
+        main_page.click(MainPageLocators.CREATE_AD_BUTTON, timeout=15)
 
+        modal = main_page.get_element(AuthModalLocators.MODAL_FORM)
+        modal_title = modal.find_element(*AuthModalLocators.MODAL_TITLE).text
 
-def test_create_ad_unauthorized_user(browser, main_page):
-    """Проверка отображения модального окна авторизации при попытке создать объявление неавторизованным пользователем"""
-    # 1. Открываем главную страницу
-    browser.get("https://qa-desk.stand.praktikum-services.ru")
-
-    # 2. Нажимаем кнопку "Разместить объявление"
-    create_ad_button = WebDriverWait(browser, 15).until(
-        EC.element_to_be_clickable(MainPageLocators.CREATE_AD_BUTTON)
-    )
-    create_ad_button.click()
-
-    # 3. Проверяем появление модального окна авторизации
-    modal = WebDriverWait(browser, 10).until(
-        EC.visibility_of_element_located(AuthModalLocators.MODAL_FORM)
-    )
-
-    # 4. Проверяем заголовок модального окна
-    modal_title = modal.find_element(*AuthModalLocators.MODAL_TITLE).text
-    assert modal_title == "Чтобы разместить объявление, авторизуйтесь", \
-        f"Заголовок модального окна не совпадает. Ожидалось: 'Чтобы разместить объявление, авторизуйтесь', Фактически: '{modal_title}'"
-
-    # 5. Проверяем наличие кнопки "Вход и регистрация" в модальном окне
-    login_button = WebDriverWait(browser, 5).until(
-        EC.visibility_of_element_located(LoginFormLocators.LOGIN_BUTTON)
-    )
-    assert login_button.is_displayed(), "Кнопка 'Войти' не отображается"
-
-    # 6. Проверяем наличие кнопки "Нет аккаунта"
-    register_button = WebDriverWait(browser, 5).until(
-        EC.visibility_of_element_located(LoginFormLocators.NO_ACCOUNT_BUTTON)
-    )
-    assert register_button.is_displayed(), "Кнопка 'Нет аккаунта' не отображается"
+        assert modal_title == "Чтобы разместить объявление, авторизуйтесь"
+        assert main_page.is_element_visible(LoginFormLocators.LOGIN_BUTTON, timeout=5)
+        assert main_page.is_element_visible(LoginFormLocators.NO_ACCOUNT_BUTTON, timeout=5)

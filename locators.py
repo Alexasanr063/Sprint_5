@@ -7,11 +7,11 @@ class MainPageLocators:
 
 
 class RegistrationFormLocators:
-    REGISTER_LINK = (By.XPATH, "//*[@id='root']/div/div[2]/div[5]/form/div[3]/button[2]")
-    EMAIL_FIELD = (By.XPATH, "//*[@id='root']/div/div[2]/div[5]/form/div[2]/div[1]/div/div/input")
+    #REGISTER_LINK = (By.XPATH, "//button[text()='Нет аккаунта']")
+    EMAIL_FIELD = (By.XPATH, "//input[@placeholder='Введите Email']")
     PASSWORD_FIELD = (By.CSS_SELECTOR, "input[type='password'][name='password']")
     REPEAT_PASSWORD_FIELD = (By.CSS_SELECTOR, "input[type='password'][name='submitPassword']")
-    SUBMIT_BUTTON = (By.XPATH, "//*[@id='root']/div/div[2]/div[5]/form/div[3]/button[1]")
+    SUBMIT_BUTTON = (By.XPATH, "//button[text()='Создать аккаунт']")
     ERROR_CONTAINER = (By.XPATH, "//div[contains(@class, 'input_inputError__fLUP9')]")
     ERROR_MESSAGE = (By.XPATH, "//div[contains(@class, 'popUp_inputColumn__RgD8n')]//span[@class='input_span__yWPqB']")
     CREATE_ACCOUNT_BUTTON = (By.XPATH, "//button[contains(., 'Создать аккаунт')]")
@@ -27,11 +27,21 @@ class LoginFormLocators:
 class ProfileLocators:
     USER_ICON = (By.CSS_SELECTOR, "svg.svgSmall")
     PROFILE_LINK = (By.CSS_SELECTOR, "h3.profileText.name")
+    # Основной контейнер объявления
     AD_CARD = (By.CSS_SELECTOR, "div.card")
-    AD_TITLE = (By.CSS_SELECTOR, "h2.h2")
-    AD_LOCATION = (By.CSS_SELECTOR, "h3.h3")
-    AD_PRICE = (By.CSS_SELECTOR, "div.price h2.h2")
-    LOGOUT_BUTTON = (By.XPATH, "//button[contains(., 'Выйти')]")
+
+    # Заголовок объявления (более надежный вариант)
+    AD_TITLE = (By.CSS_SELECTOR, "div.card h2.h2")
+
+    # Местоположение
+    AD_LOCATION = (By.CSS_SELECTOR, "div.card h3.h3")
+
+    # Цена
+    AD_PRICE = (By.CSS_SELECTOR, "div.card div.price h2.h2")
+
+    # Кнопка редактирования
+    EDIT_BUTTON = (By.CSS_SELECTOR, "div.card button.editButton")  # Цена
+    LOGOUT_BUTTON = (By.XPATH, "//button[text()='Выйти']")
     USERNAME_DISPLAY = (By.XPATH, "//h3[@class='profileText name' and contains(text(), 'User.')]")
 
 

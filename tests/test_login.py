@@ -1,37 +1,31 @@
-import pytest
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from pages import MainPage
-from locators import MainPageLocators, ProfileLocators
-
+from Sprint_5.pages import LoginPage, ProfilePage
+from Sprint_5.locators import MainPageLocators
+from Sprint_5.conftest import main_page,browser
 
 class TestAuth:
-    @pytest.fixture(autouse=True)
-    def setup(self, browser):
-        self.main_page = MainPage(browser)
-        yield
+    def test_successful_login(self, main_page, browser):
+        """Тест успешной авторизации"""
+        main_page.open()
+        main_page.open_login_form()
 
-    def test_successful_login(self, browser):
-        """Тест успешной авторизации пользователя"""
-        profile_page = self.main_page.open_login_form().login(
-            email="sanek51532@gmail.com",
-            password="281188sss"
-        )
+        login_page = LoginPage(browser)
+        login_page.login(email="sanek51532@gmail.com", password="281188sss")
 
+        profile_page = ProfilePage(browser)
         assert "qa-desk.stand.praktikum-services.ru" in browser.current_url
         assert profile_page.is_avatar_displayed()
         assert profile_page.is_username_displayed()
 
-    def test_successful_logout(self, browser):
+    def test_successful_logout(self, main_page, browser):
         """Тест успешного выхода из системы"""
-        profile_page = self.main_page.open_login_form().login(
-            email="sanek51532@gmail.com",
-            password="281188sss"
-        )
-        main_page = profile_page.logout()
+        main_page.open()
+        main_page.open_login_form()
+
+        login_page = LoginPage(browser)
+        login_page.login(email="sanek51532@gmail.com", password="281188sss")
+
+        profile_page = ProfilePage(browser)
+        profile_page.logout()
 
         assert "qa-desk.stand.praktikum-services.ru" in browser.current_url
-        login_button = WebDriverWait(browser, 10).until(
-            EC.visibility_of_element_located(MainPageLocators.LOGIN_REGISTER_BUTTON)
-        )
-        assert login_button.is_displayed()
+        assert main_page.is_element_visible(MainPageLocators.LOGIN_REGISTER_BUTTON)
