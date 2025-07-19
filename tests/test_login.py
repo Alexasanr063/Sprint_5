@@ -28,4 +28,4 @@ class TestAuth:
         profile_page.logout()
 
         assert "qa-desk.stand.praktikum-services.ru" in browser.current_url
-        assert main_page.is_element_visible(MainPageLocators.LOGIN_REGISTER_BUTTON)
+        assert main_page.is_login_register_button_visible()

@@ -34,10 +34,7 @@ class TestRegistration:
         registration_page.fill_form(email="invalid_email")
         registration_page.submit_form()
 
-        assert registration_page.is_element_visible(
-            RegistrationFormLocators.ERROR_MESSAGE,
-            timeout=5
-        ), "Сообщение об ошибке не отображается"
+        assert registration_page.is_error_message_visible(),"Сообщение об ошибке не отображается"
 
     def test_existing_user_registration(self, main_page, browser):
         """Тест регистрации уже существующего пользователя"""
@@ -51,6 +48,4 @@ class TestRegistration:
         registration_page.fill_form(email="sanek51532@gmail.com", password="281188sss")
         registration_page.submit_form()
 
-        assert registration_page.is_element_visible(
-            RegistrationFormLocators.ERROR_MESSAGE
-        ), "Сообщение об ошибке не отображается"
+        assert registration_page.is_error_message_visible(), "Сообщение об ошибке не отображается"
